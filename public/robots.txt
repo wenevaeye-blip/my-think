@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wenevaeye-blip.github.io/my-think/sitemap-index.xml

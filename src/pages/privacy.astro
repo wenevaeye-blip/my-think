@@ -1,0 +1,32 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Privacy | ${SITE_TITLE}`} description="Privacy policy for this site." />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Privacy Policy</h1>
+			<p>
+				This site may collect standard analytics, server logs, and other basic operational data needed
+				to maintain the service. No special advertising or personalization logic is active at this time.
+			</p>
+			<p>
+				If contact forms, newsletters, analytics, or ads are added in the future, this policy should be
+				updated to reflect those tools clearly.
+			</p>
+			<p>
+				For now, treat this page as the basic public notice that explains the site is in its early
+				publishing stage and may evolve over time.
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>
