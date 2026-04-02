@@ -5,6 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-	site: 'https://wenevaeye-blip.github.io/my-think',
+	site: 'https://wenevaeye-blip.github.io',
+	base: '/my-think',
 	integrations: [mdx(), sitemap()],
 });
