@@ -5,11 +5,17 @@ import HeaderLink from './HeaderLink.astro';
 const rawBase = import.meta.env.BASE_URL;
 const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
 const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+const avatarUrl = withBase('/images/profile/my-think-avatar.jpg');
 ---
 
 <header>
 	<nav>
-		<h2><a href={withBase()}>{SITE_TITLE}</a></h2>
+		<div class="brand">
+			<a class="brand-link" href={withBase()} aria-label={`${SITE_TITLE} home`}>
+				<img class="avatar" src={avatarUrl} alt="Portrait representing the voice behind My Think" />
+				<h2>{SITE_TITLE}</h2>
+			</a>
+		</div>
 		<div class="internal-links">
 			<HeaderLink href={withBase()}>Home</HeaderLink>
 			<HeaderLink href={withBase('/blog/')}>Blog</HeaderLink>
@@ -33,10 +39,6 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 		margin: 0;
 		font-size: 1rem;
 	}
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
 	nav {
 		display: flex;
 		align-items: center;
@@ -45,19 +47,40 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 		max-width: 1100px;
 		margin: 0 auto;
 	}
+	.brand {
+		display: flex;
+		align-items: center;
+	}
+	.brand-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		text-decoration: none;
+		color: rgb(var(--black));
+		padding: 0.75rem 0;
+	}
+	.avatar {
+		width: 2.3rem;
+		height: 2.3rem;
+		border-radius: 999px;
+		object-fit: cover;
+		box-shadow: 0 8px 18px rgba(var(--gray), 0.18);
+		border: 1px solid rgba(var(--gray-light), 0.9);
+		flex-shrink: 0;
+	}
 	.internal-links {
 		display: flex;
 		align-items: center;
 		gap: 0.35rem;
 		flex-wrap: wrap;
 	}
-	nav a {
+	.internal-links a {
 		padding: 1rem 0.5rem;
 		color: rgb(var(--black));
 		border-bottom: 3px solid transparent;
 		text-decoration: none;
 	}
-	nav a.active {
+	.internal-links a.active {
 		text-decoration: none;
 		border-bottom-color: var(--accent);
 	}
@@ -67,10 +90,13 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 			flex-direction: column;
 			padding: 0.35rem 0 0.5rem;
 		}
+		.brand-link {
+			padding: 0.35rem 0 0.1rem;
+		}
 		.internal-links {
 			gap: 0.1rem 0.5rem;
 		}
-		nav a {
+		.internal-links a {
 			padding: 0.35rem 0.15rem;
 		}
 	}
