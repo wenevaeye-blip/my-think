@@ -13,7 +13,7 @@ const posts = (await getCollection('blog'))
 const featured = posts[0];
 const latest = posts.slice(1, 4);
 const base = import.meta.env.BASE_URL;
-const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeholder${base}`).pathname;
+const link = (path: string) => `${base}${path.replace(/^\//, '')}`;
 ---
 
 <!doctype html>
@@ -111,16 +111,16 @@ const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeho
 		<main>
 			<section class="hero">
 				<div>
-					<p class="eyebrow">Practical technology, explained clearly</p>
-					<h1>Useful guides for everyday tech decisions.</h1>
+					<p class="eyebrow">A quiet room for bright little ideas</p>
+					<h1>Thoughts that drift in softly, then stay useful.</h1>
 					<p class="lead">
-						My Think publishes plain-English explainers, comparisons, and buying guides for people who
-						want clarity without the usual tech noise. The goal is simple: help readers understand what
-						matters, what does not, and what to do next.
+						My Think is a small place for clear ideas, curious questions, and gentle explanations about
+						everyday technology. The mood is calm, the writing is light, and the goal is to help each
+						reader leave with one new thought that feels simple, friendly, and worth keeping.
 					</p>
 					<div class="actions">
-						<a class="button primary" href={link('/blog/')}>Read the latest posts</a>
-						<a class="button secondary" href={link('/about/')}>Why this site exists</a>
+						<a class="button primary" href={link('/blog/')}>Follow the little ideas</a>
+						<a class="button secondary" href={link('/about/')}>Step inside the story</a>
 					</div>
 				</div>
 				{featured && (
@@ -136,7 +136,7 @@ const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeho
 			<section>
 				<div class="section-head">
 					<h2>Recent posts</h2>
-					<a href={link('/blog/')}>Browse the archive</a>
+					<a href={link('/blog/')}>Open the archive</a>
 				</div>
 				<div class="grid">
 					{latest.map((post) => (
