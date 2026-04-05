@@ -9,8 +9,10 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 const posts = (await getCollection('blog'))
 	.filter((post) => !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const base = import.meta.env.BASE_URL;
-const postUrl = (id: string) => `${base}blog/${id}/`;
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+const postUrl = (id: string) => withBase(`/blog/${id}/`);
 ---
 
 <!doctype html>

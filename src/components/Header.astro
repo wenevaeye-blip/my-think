@@ -1,21 +1,20 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
-const base = import.meta.env.BASE_URL;
-const HOME = base;
-const BLOG = `${base}blog/`;
-const ABOUT = `${base}about/`;
-const PRIVACY = `${base}privacy/`;
+
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
 ---
 
 <header>
 	<nav>
-		<h2><a href={HOME}>{SITE_TITLE}</a></h2>
+		<h2><a href={withBase()}>{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href={HOME}>Home</HeaderLink>
-			<HeaderLink href={BLOG}>Blog</HeaderLink>
-			<HeaderLink href={ABOUT}>About</HeaderLink>
-			<HeaderLink href={PRIVACY}>Privacy</HeaderLink>
+			<HeaderLink href={withBase()}>Home</HeaderLink>
+			<HeaderLink href={withBase('/blog/')}>Blog</HeaderLink>
+			<HeaderLink href={withBase('/about/')}>About</HeaderLink>
+			<HeaderLink href={withBase('/privacy/')}>Privacy</HeaderLink>
 		</div>
 	</nav>
 </header>
