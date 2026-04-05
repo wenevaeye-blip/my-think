@@ -12,7 +12,7 @@ tags:
   - workflow
 lang: en
 author: wenevaeye-blip
-heroImage: "/images/posts/welcome-to-my-think/hero.svg"
+heroImage: "/my-think/images/posts/welcome-to-my-think/hero.svg"
 ---
 
 This is the first post in the new English-first publishing setup.

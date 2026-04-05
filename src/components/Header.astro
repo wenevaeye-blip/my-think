@@ -2,7 +2,7 @@
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 const base = import.meta.env.BASE_URL;
-const link = (path: string) => `${base}${path.replace(/^\//, '')}`;
+const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeholder${base}`).pathname;
 ---
 
 <header>
@@ -10,9 +10,9 @@ const link = (path: string) => `${base}${path.replace(/^\//, '')}`;
 		<h2><a href={base}>{SITE_TITLE}</a></h2>
 		<div class="internal-links">
 			<HeaderLink href={base}>Home</HeaderLink>
-			<HeaderLink href={link('/blog')}>Blog</HeaderLink>
-			<HeaderLink href={link('/about')}>About</HeaderLink>
-			<HeaderLink href={link('/privacy')}>Privacy</HeaderLink>
+			<HeaderLink href={link('/blog/')}>Blog</HeaderLink>
+			<HeaderLink href={link('/about/')}>About</HeaderLink>
+			<HeaderLink href={link('/privacy/')}>Privacy</HeaderLink>
 		</div>
 	</nav>
 </header>
