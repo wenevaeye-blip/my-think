@@ -10,7 +10,7 @@ const posts = (await getCollection('blog'))
 	.filter((post) => !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 const base = import.meta.env.BASE_URL;
-const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeholder${base}`).pathname;
+const postUrl = (id: string) => `${base}blog/${id}/`;
 ---
 
 <!doctype html>
@@ -59,7 +59,7 @@ const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeho
 		<main>
 			<section class="intro">
 				<h1>Blog</h1>
-				<p>English articles for practical topics, useful comparisons, and long-term evergreen publishing.</p>
+				<p>A little collection of useful thoughts, clear explanations, and practical stories.</p>
 			</section>
 			<section class="list">
 				{posts.map((post) => (
@@ -68,7 +68,7 @@ const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeho
 							<span class="category">{post.data.category}</span>
 							<FormattedDate date={post.data.pubDate} />
 						</div>
-						<h2><a href={link(`/blog/${post.id}/`)}>{post.data.title}</a></h2>
+						<h2><a href={postUrl(post.id)}>{post.data.title}</a></h2>
 						<p>{post.data.description}</p>
 					</article>
 				))}
