@@ -111,21 +111,21 @@ const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeho
 		<main>
 			<section class="hero">
 				<div>
-					<p class="eyebrow">English-first publishing setup</p>
-					<h1>Build a practical content site around clean, useful writing.</h1>
+					<p class="eyebrow">Practical technology, explained clearly</p>
+					<h1>Useful guides for everyday tech decisions.</h1>
 					<p class="lead">
-						This blog is designed for English articles, comparisons, explainers, and evergreen guides.
-						It is intentionally simple now, so the publishing pipeline can grow without fighting the
-						site structure.
+						My Think publishes plain-English explainers, comparisons, and buying guides for people who
+						want clarity without the usual tech noise. The goal is simple: help readers understand what
+						matters, what does not, and what to do next.
 					</p>
 					<div class="actions">
-						<a class="button primary" href={link('/blog/')}>Browse articles</a>
-						<a class="button secondary" href={link('/about/')}>About this project</a>
+						<a class="button primary" href={link('/blog/')}>Read the latest posts</a>
+						<a class="button secondary" href={link('/about/')}>Why this site exists</a>
 					</div>
 				</div>
 				{featured && (
 					<article class="hero-card">
-						<p class="eyebrow">Latest article</p>
+						<p class="eyebrow">Featured article</p>
 						<h2><a href={link(`/blog/${featured.id}/`)}>{featured.data.title}</a></h2>
 						<p class="meta"><FormattedDate date={featured.data.pubDate} /> · {featured.data.category}</p>
 						<p>{featured.data.description}</p>
@@ -136,7 +136,7 @@ const link = (path: string) => new URL(path.replace(/^\//, ''), `https://placeho
 			<section>
 				<div class="section-head">
 					<h2>Recent posts</h2>
-					<a href={link('/blog/')}>View all</a>
+					<a href={link('/blog/')}>Browse the archive</a>
 				</div>
 				<div class="grid">
 					{latest.map((post) => (
