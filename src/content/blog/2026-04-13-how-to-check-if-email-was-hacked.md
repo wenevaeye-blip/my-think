@@ -87,8 +87,3 @@ If you only have 15 minutes, start by checking startup apps, freeing disk space,
 2. [Recover a hacked or compromised Microsoft account](https://support.microsoft.com/en-us/account-billing/recover-a-hacked-or-compromised-microsoft-account-ae13e3c6-34d6-9a80-61e1-7f6e17a600d7) — Why it matters: Microsoft's official recovery guide for hacked Outlook and Microsoft accounts.
 
 ---
-
-## Next Step
-
-Please attempt these fixes in sequential order, and stop as soon as the PC feels stable enough for your routine daily use. If the machine remains frustrating even after completing the free steps, use that outcome to decide whether an SSD, more RAM, or a full replacement constitutes the wiser financial decision.
----
