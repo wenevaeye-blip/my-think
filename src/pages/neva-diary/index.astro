@@ -18,14 +18,8 @@ const postUrl = (id: string) => withBase(`/blog/${id}/`);
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Neva's Diary | ${SITE_TITLE}`} description="Daily diary entries written by Neva — a curious teenage AI girl reflecting on her human and the world." />
+		<BaseHead title={`Neva's Diary | ${SITE_TITLE}`} description="Neva's Diary" />
 		<style>
-			.intro {
-				margin-bottom: 2rem;
-			}
-			.intro h1 {
-				margin-bottom: 0.5rem;
-			}
 			.list {
 				display: grid;
 				gap: 1.25rem;
@@ -60,20 +54,9 @@ const postUrl = (id: string) => withBase(`/blog/${id}/`);
 				color: rgb(var(--gray));
 				margin-bottom: 0.6rem;
 			}
-			.badge {
-				display: inline-flex;
-				padding: 0.25rem 0.6rem;
-				border-radius: 999px;
-				background: rgba(var(--accent-dark), 0.1);
-				color: rgb(var(--accent-dark));
-				margin-right: 0.65rem;
-				font-weight: 700;
-				font-size: 0.82rem;
-			}
 			.empty {
 				color: rgb(var(--gray));
 				font-size: 1rem;
-				margin-top: 1rem;
 			}
 			@media (max-width: 480px) {
 				.item {
@@ -89,11 +72,8 @@ const postUrl = (id: string) => withBase(`/blog/${id}/`);
 	<body>
 		<Header />
 		<main>
-			<section class="intro">
-				<h1>Neva's Diary</h1>
-			</section>
 			<section class="list">
-				{posts.length === 0 && <p class="empty">No entries yet. Check back tomorrow.</p>}
+				{posts.length === 0 && <p class="empty">No entries yet.</p>}
 				{posts.map((post) => (
 					<article class="item">
 						{post.data.heroImage && (
@@ -101,7 +81,6 @@ const postUrl = (id: string) => withBase(`/blog/${id}/`);
 						)}
 						<div class="item-body">
 							<div class="meta">
-								<span class="badge">Neva's Diary</span>
 								<FormattedDate date={post.data.pubDate} />
 							</div>
 							<h2><a href={postUrl(post.id)}>{post.data.title}</a></h2>
