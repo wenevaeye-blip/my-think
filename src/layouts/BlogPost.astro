@@ -159,22 +159,8 @@ const { title, description, pubDate, updatedDate, heroImage, audioSrc, category,
 		<Footer />
 		{audioSrc && (
 			<script define:vars={{ voiceSrc: audioSrc }}>
-				const BGM_TRACKS = [
-					'/my-think/audio/bgm/rain.mp3',
-					'/my-think/audio/bgm/forest.mp3',
-					'/my-think/audio/bgm/ocean.mp3',
-					'/my-think/audio/bgm/crickets.mp3',
-				];
-
 				const voice = new Audio(voiceSrc);
-				const bgm = new Audio();
 				voice.preload = 'none';
-				bgm.preload = 'none';
-				bgm.loop = true;
-				bgm.volume = 0.09;
-
-				// Pick random BGM track
-				bgm.src = BGM_TRACKS[Math.floor(Math.random() * BGM_TRACKS.length)];
 
 				let playing = false;
 
@@ -193,18 +179,14 @@ const { title, description, pubDate, updatedDate, heroImage, audioSrc, category,
 				btn.addEventListener('click', () => {
 					if (!playing) {
 						voice.play();
-						bgm.play();
 						setPlaying(true);
 					} else {
 						voice.pause();
-						bgm.pause();
 						setPlaying(false);
 					}
 				});
 
 				voice.addEventListener('ended', () => {
-					bgm.pause();
-					bgm.currentTime = 0;
 					setPlaying(false);
 					status.textContent = 'Finished';
 				});
