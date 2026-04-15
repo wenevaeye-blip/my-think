@@ -13,6 +13,7 @@ const blog = defineCollection({
 		category: z.string().default('General'),
 		tags: z.array(z.string()).default([]),
 		heroImage: z.string().optional(),
+		audioSrc: z.string().optional(),
 		lang: z.literal('en').default('en'),
 		author: z.string().default('wenevaeye-blip'),
 	}),

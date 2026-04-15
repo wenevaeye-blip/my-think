@@ -7,7 +7,7 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, audioSrc, category, tags } = Astro.props;
 ---
 
 <html lang="en">
@@ -79,6 +79,40 @@ const { title, description, pubDate, updatedDate, heroImage, category, tags } = 
 				background: rgba(var(--gray-light), 0.7);
 				color: rgb(var(--gray));
 			}
+			.audio-player {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				padding: 0.75rem 1rem;
+				margin-bottom: 1.5rem;
+				background: rgba(var(--gray-light), 0.5);
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 12px;
+			}
+			.audio-btn {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 2.5rem;
+				height: 2.5rem;
+				border-radius: 50%;
+				background: rgb(var(--accent));
+				border: none;
+				cursor: pointer;
+				flex-shrink: 0;
+				transition: opacity 150ms;
+			}
+			.audio-btn:hover { opacity: 0.85; }
+			.audio-btn svg { fill: white; }
+			.audio-label {
+				font-size: 0.875rem;
+				color: rgb(var(--gray));
+			}
+			.audio-label strong {
+				display: block;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95rem;
+			}
 		</style>
 	</head>
 
@@ -106,10 +140,76 @@ const { title, description, pubDate, updatedDate, heroImage, category, tags } = 
 							</div>
 						)}
 					</div>
+					{audioSrc && (
+						<div class="audio-player" id="audio-player">
+							<button class="audio-btn" id="audio-play-btn" aria-label="Play / Pause">
+								<svg id="icon-play" width="16" height="16" viewBox="0 0 16 16"><polygon points="3,1 15,8 3,15"/></svg>
+								<svg id="icon-pause" width="16" height="16" viewBox="0 0 16 16" style="display:none"><rect x="2" y="1" width="4" height="14"/><rect x="10" y="1" width="4" height="14"/></svg>
+							</button>
+							<div class="audio-label">
+								<strong>Listen to this post</strong>
+								<span id="audio-status">Press play to start</span>
+							</div>
+						</div>
+					)}
 					<slot />
 				</div>
 			</article>
 		</main>
 		<Footer />
+		{audioSrc && (
+			<script define:vars={{ voiceSrc: audioSrc }}>
+				const BGM_TRACKS = [
+					'/my-think/audio/bgm/rain.mp3',
+					'/my-think/audio/bgm/forest.mp3',
+					'/my-think/audio/bgm/ocean.mp3',
+					'/my-think/audio/bgm/crickets.mp3',
+					'/my-think/audio/bgm/cafe.mp3',
+				];
+
+				const voice = new Audio(voiceSrc);
+				const bgm = new Audio();
+				voice.preload = 'none';
+				bgm.preload = 'none';
+				bgm.loop = true;
+				bgm.volume = 0.18;
+
+				// Pick random BGM track
+				bgm.src = BGM_TRACKS[Math.floor(Math.random() * BGM_TRACKS.length)];
+
+				let playing = false;
+
+				const btn = document.getElementById('audio-play-btn');
+				const iconPlay = document.getElementById('icon-play');
+				const iconPause = document.getElementById('icon-pause');
+				const status = document.getElementById('audio-status');
+
+				function setPlaying(val) {
+					playing = val;
+					iconPlay.style.display = val ? 'none' : '';
+					iconPause.style.display = val ? '' : 'none';
+					status.textContent = val ? 'Playing…' : 'Paused';
+				}
+
+				btn.addEventListener('click', () => {
+					if (!playing) {
+						voice.play();
+						bgm.play();
+						setPlaying(true);
+					} else {
+						voice.pause();
+						bgm.pause();
+						setPlaying(false);
+					}
+				});
+
+				voice.addEventListener('ended', () => {
+					bgm.pause();
+					bgm.currentTime = 0;
+					setPlaying(false);
+					status.textContent = 'Finished';
+				});
+			</script>
+		)}
 	</body>
 </html>
