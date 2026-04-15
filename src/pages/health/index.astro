@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const posts = (await getCollection('blog'))
+	.filter((post) => !post.data.draft && post.data.category.toLowerCase() === 'health')
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+const postUrl = (id: string) => withBase(`/blog/${id}/`);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Health | ${SITE_TITLE}`} description="Daily evidence-based health articles on food, lifestyle, and movement." />
+		<style>
+			.intro {
+				margin-bottom: 2rem;
+			}
+			.intro h1 {
+				margin-bottom: 0.5rem;
+			}
+			.list {
+				display: grid;
+				gap: 1rem;
+			}
+			.item {
+				background: white;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 18px;
+				padding: 1.25rem;
+				box-shadow: 0 12px 28px rgba(var(--gray), 0.06);
+			}
+			.item h2 {
+				font-size: 1.55rem;
+				margin-bottom: 0.45rem;
+			}
+			.meta {
+				font-size: 0.92rem;
+				color: rgb(var(--gray));
+				margin-bottom: 0.75rem;
+			}
+			.badge {
+				display: inline-flex;
+				padding: 0.25rem 0.6rem;
+				border-radius: 999px;
+				background: rgba(var(--gray-light), 0.8);
+				margin-right: 0.65rem;
+				font-weight: 700;
+			}
+			.tags {
+				display: flex;
+				gap: 0.4rem;
+				flex-wrap: wrap;
+				margin-top: 0.5rem;
+			}
+			.tags span {
+				font-size: 0.82rem;
+				padding: 0.2rem 0.5rem;
+				border-radius: 999px;
+				background: rgba(var(--gray-light), 0.6);
+				color: rgb(var(--gray));
+			}
+			.empty {
+				color: rgb(var(--gray));
+				font-size: 1rem;
+				margin-top: 1rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="intro">
+				<h1>Health</h1>
+				<p>Daily evidence-based articles on food, lifestyle, and movement — grounded in recent research.</p>
+			</section>
+			<section class="list">
+				{posts.length === 0 && <p class="empty">No posts yet. Check back tomorrow.</p>}
+				{posts.map((post) => (
+					<article class="item">
+						<div class="meta">
+							<span class="badge">Health</span>
+							<FormattedDate date={post.data.pubDate} />
+						</div>
+						<h2><a href={postUrl(post.id)}>{post.data.title}</a></h2>
+						<p>{post.data.description}</p>
+						{post.data.tags?.length > 0 && (
+							<div class="tags">
+								{post.data.tags.map((tag: string) => <span>#{tag}</span>)}
+							</div>
+						)}
+					</article>
+				))}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
