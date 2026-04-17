@@ -1,0 +1,368 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Color Converter HEX RGB HSL — Free Online Tool · ${SITE_TITLE}`} description="Convert colors between HEX, RGB, and HSL formats instantly. Pick a color or enter values manually. Free, no sign-up, runs entirely in your browser." />
+		<script type="application/ld+json" is:inline>{`
+		{
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Color Converter — HEX, RGB, HSL",
+			"url": "https://wenevaeye-blip.github.io/my-think/tools/color-converter/",
+			"description": "Convert colors between HEX, RGB, and HSL formats. Pick a color or type a value. Runs entirely in your browser.",
+			"applicationCategory": "DesignApplication",
+			"operatingSystem": "Any",
+			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+		}
+		`}</script>
+		<style>
+			.breadcrumb {
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
+				margin-bottom: 1.5rem;
+			}
+			.breadcrumb a { color: rgb(var(--gray)); text-decoration: none; }
+			.breadcrumb a:hover { color: var(--accent); }
+			.page-header { margin-bottom: 1.5rem; }
+			.eyebrow {
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: var(--accent);
+				margin: 0 0 0.4rem;
+			}
+			.page-header h1 {
+				font-size: clamp(1.6rem, 4vw, 2.2rem);
+				margin: 0 0 0.4rem;
+				line-height: 1.1;
+			}
+			.lead { font-size: 0.95rem; color: rgb(var(--gray)); margin: 0; }
+			.privacy-notice {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				margin-top: 0.65rem;
+				padding: 0.4rem 0.85rem;
+				background: rgba(35, 55, 255, 0.06);
+				border: 1px solid rgba(35, 55, 255, 0.18);
+				border-radius: 999px;
+				font-size: 0.82rem;
+				color: var(--accent-dark);
+				font-weight: 700;
+			}
+			.tool-card {
+				background: white;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 20px;
+				padding: 1.5rem;
+				box-shadow: 0 20px 40px rgba(var(--gray), 0.08);
+				margin-top: 1.5rem;
+			}
+			.color-picker-row {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+				margin-bottom: 1.5rem;
+				flex-wrap: wrap;
+			}
+			.swatch {
+				width: 4rem;
+				height: 4rem;
+				border-radius: 14px;
+				border: 1px solid rgba(var(--gray-light), 1);
+				box-shadow: 0 4px 12px rgba(var(--gray), 0.12);
+				flex-shrink: 0;
+				cursor: pointer;
+				transition: transform 0.12s;
+			}
+			.swatch:hover { transform: scale(1.05); }
+			.color-picker-input {
+				width: 0;
+				height: 0;
+				opacity: 0;
+				position: absolute;
+				pointer-events: none;
+			}
+			.picker-label {
+				font-size: 0.88rem;
+				color: rgb(var(--gray));
+			}
+			.picker-label strong { color: rgb(var(--black)); display: block; font-size: 0.9rem; }
+			.formats-grid {
+				display: grid;
+				gap: 0.75rem;
+				grid-template-columns: repeat(3, minmax(0, 1fr));
+			}
+			.format-block {
+				display: flex;
+				flex-direction: column;
+				gap: 0.3rem;
+			}
+			.field-label {
+				display: block;
+				font-size: 0.82rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: rgb(var(--gray));
+			}
+			.format-input {
+				width: 100%;
+				padding: 0.7rem 0.85rem;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 12px;
+				font-family: "Courier New", Courier, monospace;
+				font-size: 0.88rem;
+				color: rgb(var(--gray-dark));
+				background: rgba(var(--gray-light), 0.18);
+				box-sizing: border-box;
+				transition: border-color 0.12s;
+			}
+			.format-input:focus { outline: none; border-color: var(--accent); }
+			.copy-btn {
+				padding: 0.3rem 0.7rem;
+				border-radius: 999px;
+				border: 1px solid rgba(var(--gray-light), 1);
+				background: white;
+				font-family: "Atkinson", sans-serif;
+				font-size: 0.78rem;
+				font-weight: 700;
+				cursor: pointer;
+				color: rgb(var(--gray-dark));
+				transition: background 0.12s, color 0.12s;
+				align-self: flex-start;
+			}
+			.copy-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+			.status-msg {
+				font-size: 0.85rem;
+				margin-top: 0.75rem;
+				min-height: 1.2em;
+				color: rgb(var(--gray));
+			}
+			.status-msg.error { color: #c0392b; }
+			.status-msg.success { color: #27ae60; }
+			@media (max-width: 520px) {
+				.formats-grid { grid-template-columns: 1fr; }
+			}
+			.about-section {
+				margin-top: 2rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid rgba(var(--gray-light), 1);
+			}
+			.about-section h2 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+			.about-section p, .about-section li {
+				font-size: 0.92rem;
+				color: rgb(var(--gray-dark));
+				line-height: 1.65;
+				margin-bottom: 0.5rem;
+			}
+			.about-section ul { padding-left: 1.2rem; margin: 0.4rem 0 0.8rem; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href={withBase('/tools/')}>Tools</a> &rsaquo; Color Converter
+			</nav>
+
+			<header class="page-header">
+				<p class="eyebrow">Utility</p>
+				<h1>Color Converter</h1>
+				<p class="lead">Convert between HEX, RGB, and HSL. Click the swatch to open a color picker.</p>
+				<p class="privacy-notice" aria-label="Privacy assurance">
+					🔒 Runs entirely in your browser — no data sent to any server.
+				</p>
+			</header>
+
+			<section class="tool-card" aria-label="Color converter tool">
+				<div class="color-picker-row">
+					<div class="swatch" id="swatch" title="Click to open color picker" role="button" tabindex="0" aria-label="Color swatch — click to pick a color"></div>
+					<input class="color-picker-input" type="color" id="color-picker" value="#2337ff" tabindex="-1" aria-hidden="true" />
+					<div class="picker-label">
+						<strong id="picked-hex">#2337FF</strong>
+						Click the swatch or edit any field below
+					</div>
+				</div>
+
+				<div class="formats-grid">
+					<div class="format-block">
+						<label class="field-label" for="input-hex">HEX</label>
+						<input class="format-input" id="input-hex" type="text" value="#2337FF" spellcheck="false" maxlength="7" />
+						<button class="copy-btn" data-copy="hex">Copy</button>
+					</div>
+					<div class="format-block">
+						<label class="field-label" for="input-rgb">RGB</label>
+						<input class="format-input" id="input-rgb" type="text" value="rgb(35, 55, 255)" spellcheck="false" />
+						<button class="copy-btn" data-copy="rgb">Copy</button>
+					</div>
+					<div class="format-block">
+						<label class="field-label" for="input-hsl">HSL</label>
+						<input class="format-input" id="input-hsl" type="text" value="hsl(234, 100%, 57%)" spellcheck="false" />
+						<button class="copy-btn" data-copy="hsl">Copy</button>
+					</div>
+				</div>
+				<p class="status-msg" id="status-color" aria-live="polite"></p>
+			</section>
+
+			<aside class="about-section">
+				<h2>Color formats explained</h2>
+				<ul>
+					<li><strong>HEX</strong> — six-digit hexadecimal code (e.g. <code>#FF5733</code>). Standard in HTML and CSS; compact and widely recognised.</li>
+					<li><strong>RGB</strong> — red, green, blue channels from 0–255 (e.g. <code>rgb(255, 87, 51)</code>). Easy to adjust individual color channels.</li>
+					<li><strong>HSL</strong> — hue (0–360°), saturation (0–100%), lightness (0–100%) (e.g. <code>hsl(11, 100%, 60%)</code>). Intuitive for creating color palettes and adjusting brightness.</li>
+				</ul>
+				<h2>How to use</h2>
+				<p>
+					Click the colored swatch to open your browser's native color picker, or type directly
+					into any of the three input fields. All three formats update together automatically.
+					Press <strong>Copy</strong> next to any format to copy that value to your clipboard.
+				</p>
+			</aside>
+		</main>
+		<Footer />
+
+		<script is:inline>
+			(function () {
+				const swatchEl = document.getElementById('swatch');
+				const pickerEl = document.getElementById('color-picker');
+				const pickedHexEl = document.getElementById('picked-hex');
+				const hexInput = document.getElementById('input-hex');
+				const rgbInput = document.getElementById('input-rgb');
+				const hslInput = document.getElementById('input-hsl');
+				const statusEl = document.getElementById('status-color');
+
+				function setStatus(msg, type) {
+					statusEl.textContent = msg;
+					statusEl.className = 'status-msg' + (type ? ' ' + type : '');
+					if (type === 'success') setTimeout(() => { statusEl.textContent = ''; statusEl.className = 'status-msg'; }, 2000);
+				}
+
+				function hexToRgb(hex) {
+					const h = hex.replace('#', '');
+					if (h.length !== 6) return null;
+					const r = parseInt(h.slice(0,2), 16);
+					const g = parseInt(h.slice(2,4), 16);
+					const b = parseInt(h.slice(4,6), 16);
+					if (isNaN(r) || isNaN(g) || isNaN(b)) return null;
+					return { r, g, b };
+				}
+
+				function rgbToHsl(r, g, b) {
+					r /= 255; g /= 255; b /= 255;
+					const max = Math.max(r, g, b), min = Math.min(r, g, b);
+					let h, s, l = (max + min) / 2;
+					if (max === min) {
+						h = s = 0;
+					} else {
+						const d = max - min;
+						s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+						switch (max) {
+							case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+							case g: h = ((b - r) / d + 2) / 6; break;
+							case b: h = ((r - g) / d + 4) / 6; break;
+						}
+					}
+					return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+				}
+
+				function hslToRgb(h, s, l) {
+					s /= 100; l /= 100;
+					const k = n => (n + h / 30) % 12;
+					const a = s * Math.min(l, 1 - l);
+					const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+					return { r: Math.round(f(0)*255), g: Math.round(f(8)*255), b: Math.round(f(4)*255) };
+				}
+
+				function componentToHex(c) { return c.toString(16).padStart(2, '0').toUpperCase(); }
+
+				function rgbToHex(r, g, b) { return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b); }
+
+				function parseRgb(str) {
+					const m = str.match(/rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/i);
+					if (!m) return null;
+					return { r: parseInt(m[1]), g: parseInt(m[2]), b: parseInt(m[3]) };
+				}
+
+				function parseHsl(str) {
+					const m = str.match(/hsl\s*\(\s*(\d+)\s*,\s*(\d+)%?\s*,\s*(\d+)%?\s*\)/i);
+					if (!m) return null;
+					return { h: parseInt(m[1]), s: parseInt(m[2]), l: parseInt(m[3]) };
+				}
+
+				function updateAll(r, g, b) {
+					const hex = rgbToHex(r, g, b);
+					const { h, s, l } = rgbToHsl(r, g, b);
+					hexInput.value = hex;
+					rgbInput.value = `rgb(${r}, ${g}, ${b})`;
+					hslInput.value = `hsl(${h}, ${s}%, ${l}%)`;
+					swatchEl.style.background = hex;
+					pickerEl.value = hex;
+					pickedHexEl.textContent = hex;
+					statusEl.textContent = '';
+					statusEl.className = 'status-msg';
+				}
+
+				// Init
+				updateAll(35, 55, 255);
+
+				// Swatch / picker
+				swatchEl.addEventListener('click', () => pickerEl.click());
+				swatchEl.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') pickerEl.click(); });
+				pickerEl.addEventListener('input', () => {
+					const rgb = hexToRgb(pickerEl.value);
+					if (rgb) updateAll(rgb.r, rgb.g, rgb.b);
+				});
+
+				// HEX input
+				hexInput.addEventListener('change', () => {
+					const raw = hexInput.value.trim();
+					const hex = raw.startsWith('#') ? raw : '#' + raw;
+					const rgb = hexToRgb(hex);
+					if (!rgb) { setStatus('Invalid HEX color.', 'error'); return; }
+					updateAll(rgb.r, rgb.g, rgb.b);
+				});
+
+				// RGB input
+				rgbInput.addEventListener('change', () => {
+					const rgb = parseRgb(rgbInput.value.trim());
+					if (!rgb) { setStatus('Use format: rgb(R, G, B)', 'error'); return; }
+					updateAll(rgb.r, rgb.g, rgb.b);
+				});
+
+				// HSL input
+				hslInput.addEventListener('change', () => {
+					const hsl = parseHsl(hslInput.value.trim());
+					if (!hsl) { setStatus('Use format: hsl(H, S%, L%)', 'error'); return; }
+					const { r, g, b } = hslToRgb(hsl.h, hsl.s, hsl.l);
+					updateAll(r, g, b);
+				});
+
+				// Copy buttons
+				document.querySelectorAll('.copy-btn').forEach(btn => {
+					btn.addEventListener('click', async () => {
+						const type = btn.dataset.copy;
+						const val = type === 'hex' ? hexInput.value : type === 'rgb' ? rgbInput.value : hslInput.value;
+						try {
+							await navigator.clipboard.writeText(val);
+							setStatus('Copied ' + val, 'success');
+						} catch {
+							setStatus('Copy failed — select and copy manually.', 'error');
+						}
+					});
+				});
+			})();
+		</script>
+	</body>
+</html>

@@ -21,13 +21,37 @@ const tools = [
 		description: 'Paste raw JSON to validate, pretty-print, and explore its structure. Highlights syntax errors immediately.',
 		icon: '{ }',
 	},
+	{
+		slug: 'base64',
+		title: 'Base64 Encoder / Decoder',
+		description: 'Encode plain text to Base64 or decode a Base64 string back. Useful for JWTs, data URIs, and HTTP Basic Auth.',
+		icon: '64',
+	},
+	{
+		slug: 'timestamp',
+		title: 'Unix Timestamp Converter',
+		description: 'Convert Unix epoch timestamps to readable dates and back. Auto-detects seconds vs milliseconds.',
+		icon: '⏱',
+	},
+	{
+		slug: 'color-converter',
+		title: 'Color Converter',
+		description: 'Convert colors between HEX, RGB, and HSL. Click the swatch to open a native color picker.',
+		icon: '🎨',
+	},
+	{
+		slug: 'password-generator',
+		title: 'Password Generator',
+		description: 'Generate strong, random passwords with custom length and character types. Uses the secure crypto API.',
+		icon: '🔑',
+	},
 ];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Free Online Developer Tools · ${SITE_TITLE}`} description="Free, client-side web tools for everyday developer tasks — URL encoder/decoder, JSON formatter and validator. No sign-up, no data sent to any server." />
+		<BaseHead title={`Free Online Developer Tools · ${SITE_TITLE}`} description="Free, client-side web tools for developers and designers — URL encoder/decoder, JSON formatter, Base64 codec, Unix timestamp converter, color converter, and password generator. No sign-up, no data sent to any server." />
 		<script type="application/ld+json" is:inline>{`
 		{
 			"@context": "https://schema.org",
@@ -47,6 +71,30 @@ const tools = [
 					"name": "JSON Formatter & Validator",
 					"url": "https://wenevaeye-blip.github.io/my-think/tools/json-formatter/",
 					"applicationCategory": "DeveloperApplication"
+				},
+				{
+					"@type": "WebApplication",
+					"name": "Base64 Encoder / Decoder",
+					"url": "https://wenevaeye-blip.github.io/my-think/tools/base64/",
+					"applicationCategory": "DeveloperApplication"
+				},
+				{
+					"@type": "WebApplication",
+					"name": "Unix Timestamp Converter",
+					"url": "https://wenevaeye-blip.github.io/my-think/tools/timestamp/",
+					"applicationCategory": "DeveloperApplication"
+				},
+				{
+					"@type": "WebApplication",
+					"name": "Color Converter — HEX, RGB, HSL",
+					"url": "https://wenevaeye-blip.github.io/my-think/tools/color-converter/",
+					"applicationCategory": "DesignApplication"
+				},
+				{
+					"@type": "WebApplication",
+					"name": "Password Generator",
+					"url": "https://wenevaeye-blip.github.io/my-think/tools/password-generator/",
+					"applicationCategory": "SecurityApplication"
 				}
 			]
 		}

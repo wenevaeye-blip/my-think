@@ -1,0 +1,380 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Unix Timestamp Converter — Free Online Tool · ${SITE_TITLE}`} description="Convert Unix timestamps to human-readable dates and times, or convert any date back to an epoch timestamp. Free, instant, no sign-up required." />
+		<script type="application/ld+json" is:inline>{`
+		{
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Unix Timestamp Converter",
+			"url": "https://wenevaeye-blip.github.io/my-think/tools/timestamp/",
+			"description": "Convert Unix epoch timestamps to readable dates and vice versa. Supports seconds and milliseconds. Runs entirely in your browser.",
+			"applicationCategory": "DeveloperApplication",
+			"operatingSystem": "Any",
+			"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+		}
+		`}</script>
+		<style>
+			.breadcrumb {
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
+				margin-bottom: 1.5rem;
+			}
+			.breadcrumb a { color: rgb(var(--gray)); text-decoration: none; }
+			.breadcrumb a:hover { color: var(--accent); }
+			.page-header { margin-bottom: 1.5rem; }
+			.eyebrow {
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: var(--accent);
+				margin: 0 0 0.4rem;
+			}
+			.page-header h1 {
+				font-size: clamp(1.6rem, 4vw, 2.2rem);
+				margin: 0 0 0.4rem;
+				line-height: 1.1;
+			}
+			.lead { font-size: 0.95rem; color: rgb(var(--gray)); margin: 0; }
+			.privacy-notice {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				margin-top: 0.65rem;
+				padding: 0.4rem 0.85rem;
+				background: rgba(35, 55, 255, 0.06);
+				border: 1px solid rgba(35, 55, 255, 0.18);
+				border-radius: 999px;
+				font-size: 0.82rem;
+				color: var(--accent-dark);
+				font-weight: 700;
+			}
+			.tool-card {
+				background: white;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 20px;
+				padding: 1.5rem;
+				box-shadow: 0 20px 40px rgba(var(--gray), 0.08);
+				margin-top: 1.5rem;
+			}
+			.now-banner {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				flex-wrap: wrap;
+				padding: 0.85rem 1rem;
+				background: rgba(var(--gray-light), 0.3);
+				border-radius: 12px;
+				margin-bottom: 1.5rem;
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
+			}
+			.now-banner strong { color: rgb(var(--black)); font-size: 1rem; }
+			.now-banner .btn-sm {
+				padding: 0.35rem 0.85rem;
+				border-radius: 999px;
+				border: none;
+				font-family: "Atkinson", sans-serif;
+				font-size: 0.82rem;
+				font-weight: 700;
+				cursor: pointer;
+				background: var(--accent);
+				color: white;
+				transition: opacity 0.12s;
+				white-space: nowrap;
+			}
+			.now-banner .btn-sm:hover { opacity: 0.82; }
+			.section-divider {
+				border: none;
+				border-top: 1px solid rgba(var(--gray-light), 1);
+				margin: 1.5rem 0;
+			}
+			.convert-block { margin-bottom: 1.25rem; }
+			.convert-block:last-child { margin-bottom: 0; }
+			.field-label {
+				display: block;
+				font-size: 0.82rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: rgb(var(--gray));
+				margin-bottom: 0.4rem;
+			}
+			.input-row {
+				display: flex;
+				gap: 0.5rem;
+				align-items: stretch;
+				flex-wrap: wrap;
+			}
+			.text-input {
+				flex: 1;
+				min-width: 0;
+				padding: 0.7rem 1rem;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 12px;
+				font-family: "Courier New", Courier, monospace;
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
+				background: rgba(var(--gray-light), 0.18);
+				box-sizing: border-box;
+				transition: border-color 0.12s;
+			}
+			.text-input:focus { outline: none; border-color: var(--accent); }
+			.btn {
+				padding: 0.55rem 1.1rem;
+				border-radius: 999px;
+				border: none;
+				font-family: "Atkinson", sans-serif;
+				font-size: 0.9rem;
+				font-weight: 700;
+				cursor: pointer;
+				transition: opacity 0.12s;
+				white-space: nowrap;
+			}
+			.btn:hover { opacity: 0.82; }
+			.btn.primary { background: var(--accent); color: white; }
+			.btn.secondary { background: rgba(var(--gray-light), 0.9); color: rgb(var(--gray-dark)); }
+			.result-box {
+				margin-top: 0.75rem;
+				padding: 0.85rem 1rem;
+				background: rgba(var(--gray-light), 0.3);
+				border-radius: 12px;
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
+				min-height: 2.8rem;
+				word-break: break-all;
+			}
+			.result-box .result-label {
+				font-size: 0.75rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: rgb(var(--gray));
+				margin-bottom: 0.25rem;
+			}
+			.result-box .result-value {
+				font-family: "Courier New", Courier, monospace;
+				font-size: 0.95rem;
+				color: rgb(var(--black));
+				font-weight: 700;
+			}
+			.result-rows { display: flex; flex-direction: column; gap: 0.3rem; }
+			.result-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: baseline; }
+			.result-row .lbl { font-size: 0.8rem; color: rgb(var(--gray)); min-width: 3.5rem; }
+			.result-row .val { font-family: "Courier New", Courier, monospace; font-size: 0.88rem; color: rgb(var(--black)); }
+			.status-msg {
+				font-size: 0.85rem;
+				margin-top: 0.4rem;
+				min-height: 1.2em;
+				color: rgb(var(--gray));
+			}
+			.status-msg.error { color: #c0392b; }
+			.status-msg.success { color: #27ae60; }
+			.about-section {
+				margin-top: 2rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid rgba(var(--gray-light), 1);
+			}
+			.about-section h2 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+			.about-section p, .about-section li {
+				font-size: 0.92rem;
+				color: rgb(var(--gray-dark));
+				line-height: 1.65;
+				margin-bottom: 0.5rem;
+			}
+			.about-section ul { padding-left: 1.2rem; margin: 0.4rem 0 0.8rem; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href={withBase('/tools/')}>Tools</a> &rsaquo; Unix Timestamp Converter
+			</nav>
+
+			<header class="page-header">
+				<p class="eyebrow">Utility</p>
+				<h1>Unix Timestamp Converter</h1>
+				<p class="lead">Convert epoch timestamps to readable dates, or any date back to a Unix timestamp.</p>
+				<p class="privacy-notice" aria-label="Privacy assurance">
+					🔒 Runs entirely in your browser — no data sent to any server.
+				</p>
+			</header>
+
+			<section class="tool-card" aria-label="Unix timestamp converter tool">
+				<div class="now-banner" id="now-banner">
+					<div>
+						<div style="font-size:0.78rem;color:rgb(var(--gray));margin-bottom:0.15rem;">Current Unix timestamp</div>
+						<strong id="now-ts">—</strong>
+						<span style="font-size:0.82rem;color:rgb(var(--gray));margin-left:0.5rem;" id="now-readable"></span>
+					</div>
+					<button class="btn-sm" id="btn-use-now">Use now</button>
+				</div>
+
+				<!-- Timestamp → Date -->
+				<div class="convert-block">
+					<label class="field-label" for="ts-input">Unix timestamp → human date</label>
+					<div class="input-row">
+						<input class="text-input" id="ts-input" type="text" placeholder="e.g. 1713225600 or 1713225600000" spellcheck="false" />
+						<button class="btn primary" id="btn-ts-convert">Convert</button>
+						<button class="btn secondary" id="btn-ts-clear">Clear</button>
+					</div>
+					<div class="result-box" id="ts-result" hidden>
+						<div class="result-rows" id="ts-result-rows"></div>
+					</div>
+					<p class="status-msg" id="status-ts" aria-live="polite"></p>
+				</div>
+
+				<hr class="section-divider" />
+
+				<!-- Date → Timestamp -->
+				<div class="convert-block">
+					<label class="field-label" for="date-input">Date / time → Unix timestamp</label>
+					<div class="input-row">
+						<input class="text-input" id="date-input" type="datetime-local" />
+						<button class="btn primary" id="btn-date-convert">Convert</button>
+						<button class="btn secondary" id="btn-date-clear">Clear</button>
+					</div>
+					<div class="result-box" id="date-result" hidden>
+						<div class="result-rows" id="date-result-rows"></div>
+					</div>
+					<p class="status-msg" id="status-date" aria-live="polite"></p>
+				</div>
+			</section>
+
+			<aside class="about-section">
+				<h2>What is a Unix timestamp?</h2>
+				<p>
+					A Unix timestamp (also called epoch time) is the number of <strong>seconds</strong> that
+					have elapsed since January 1, 1970, 00:00:00 UTC. It is timezone-independent and
+					universally understood by programming languages, databases, and APIs.
+					Millisecond timestamps — used in JavaScript's <code>Date.now()</code> — are simply
+					the epoch value multiplied by 1000.
+				</p>
+				<h2>When is it useful?</h2>
+				<ul>
+					<li>Reading server logs or API responses that return numeric timestamps</li>
+					<li>Debugging token expiry fields like <code>exp</code> in a JWT</li>
+					<li>Setting scheduled tasks or TTL values in a database</li>
+					<li>Converting timestamps across different timezones</li>
+				</ul>
+			</aside>
+		</main>
+		<Footer />
+
+		<script is:inline>
+			(function () {
+				function pad(n) { return String(n).padStart(2, '0'); }
+
+				function formatDate(d) {
+					return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} `
+						+ `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+				}
+
+				function formatDateUTC(d) {
+					return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())} `
+						+ `${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())} UTC`;
+				}
+
+				// Live clock
+				function updateClock() {
+					const now = new Date();
+					const ts = Math.floor(now.getTime() / 1000);
+					document.getElementById('now-ts').textContent = ts;
+					document.getElementById('now-readable').textContent = formatDateUTC(now);
+				}
+				updateClock();
+				setInterval(updateClock, 1000);
+
+				document.getElementById('btn-use-now').addEventListener('click', () => {
+					const ts = Math.floor(Date.now() / 1000);
+					document.getElementById('ts-input').value = ts;
+					convertTs();
+				});
+
+				function setStatus(id, msg, type) {
+					const el = document.getElementById(id);
+					el.textContent = msg;
+					el.className = 'status-msg' + (type ? ' ' + type : '');
+				}
+
+				function makeRows(pairs) {
+					return pairs.map(([lbl, val]) =>
+						`<div class="result-row"><span class="lbl">${lbl}</span><span class="val">${val}</span></div>`
+					).join('');
+				}
+
+				function convertTs() {
+					const raw = document.getElementById('ts-input').value.trim();
+					const resultBox = document.getElementById('ts-result');
+					const resultRows = document.getElementById('ts-result-rows');
+					if (!raw) { setStatus('status-ts', 'Enter a timestamp.', ''); resultBox.hidden = true; return; }
+					let num = Number(raw);
+					if (isNaN(num)) { setStatus('status-ts', 'Not a valid number.', 'error'); resultBox.hidden = true; return; }
+					// auto-detect ms vs s
+					const isMs = raw.length >= 13;
+					const d = isMs ? new Date(num) : new Date(num * 1000);
+					if (isNaN(d.getTime())) { setStatus('status-ts', 'Timestamp out of range.', 'error'); resultBox.hidden = true; return; }
+					setStatus('status-ts', '', '');
+					resultRows.innerHTML = makeRows([
+						['Local', formatDate(d)],
+						['UTC', formatDateUTC(d)],
+						['ISO', d.toISOString()],
+						['Unit', isMs ? 'milliseconds' : 'seconds'],
+					]);
+					resultBox.hidden = false;
+				}
+
+				document.getElementById('btn-ts-convert').addEventListener('click', convertTs);
+				document.getElementById('ts-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') convertTs(); });
+				document.getElementById('btn-ts-clear').addEventListener('click', () => {
+					document.getElementById('ts-input').value = '';
+					document.getElementById('ts-result').hidden = true;
+					setStatus('status-ts', '', '');
+				});
+
+				// Set datetime-local default to now
+				const now = new Date();
+				const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+				document.getElementById('date-input').value = localISO;
+
+				function convertDate() {
+					const val = document.getElementById('date-input').value;
+					const resultBox = document.getElementById('date-result');
+					const resultRows = document.getElementById('date-result-rows');
+					if (!val) { setStatus('status-date', 'Pick a date and time.', ''); resultBox.hidden = true; return; }
+					const d = new Date(val);
+					if (isNaN(d.getTime())) { setStatus('status-date', 'Invalid date.', 'error'); resultBox.hidden = true; return; }
+					const s = Math.floor(d.getTime() / 1000);
+					setStatus('status-date', '', '');
+					resultRows.innerHTML = makeRows([
+						['Seconds', String(s)],
+						['Milliseconds', String(s * 1000)],
+						['UTC', formatDateUTC(d)],
+					]);
+					resultBox.hidden = false;
+				}
+
+				document.getElementById('btn-date-convert').addEventListener('click', convertDate);
+				document.getElementById('btn-date-clear').addEventListener('click', () => {
+					document.getElementById('date-input').value = '';
+					document.getElementById('date-result').hidden = true;
+					setStatus('status-date', '', '');
+				});
+			})();
+		</script>
+	</body>
+</html>
