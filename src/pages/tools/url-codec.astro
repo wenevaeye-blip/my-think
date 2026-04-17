@@ -1,0 +1,291 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`URL Encoder / Decoder · ${SITE_TITLE}`} description="Encode or decode URL percent-encoding directly in your browser. No data leaves your device." />
+		<style>
+			.breadcrumb {
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
+				margin-bottom: 1.5rem;
+			}
+			.breadcrumb a {
+				color: rgb(var(--gray));
+				text-decoration: none;
+			}
+			.breadcrumb a:hover {
+				color: var(--accent);
+			}
+			.page-header {
+				margin-bottom: 1.5rem;
+			}
+			.eyebrow {
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: var(--accent);
+				margin: 0 0 0.4rem;
+			}
+			.page-header h1 {
+				font-size: clamp(1.6rem, 4vw, 2.2rem);
+				margin: 0 0 0.4rem;
+				line-height: 1.1;
+			}
+			.lead {
+				font-size: 0.95rem;
+				color: rgb(var(--gray));
+				margin: 0;
+			}
+			.tool-card {
+				background: white;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 20px;
+				padding: 1.5rem;
+				box-shadow: 0 20px 40px rgba(var(--gray), 0.08);
+				margin-top: 1.5rem;
+			}
+			.mode-tabs {
+				display: flex;
+				gap: 0.4rem;
+				margin-bottom: 1.25rem;
+			}
+			.tab-btn {
+				padding: 0.45rem 1rem;
+				border-radius: 999px;
+				border: 1px solid rgba(var(--gray-light), 1);
+				background: transparent;
+				font-family: "Atkinson", sans-serif;
+				font-size: 0.9rem;
+				cursor: pointer;
+				color: rgb(var(--gray-dark));
+				transition: background 0.12s, color 0.12s;
+			}
+			.tab-btn.active {
+				background: var(--accent);
+				color: white;
+				border-color: var(--accent);
+			}
+			.field-label {
+				display: block;
+				font-size: 0.82rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: rgb(var(--gray));
+				margin-bottom: 0.4rem;
+			}
+			.io-area {
+				width: 100%;
+				min-height: 130px;
+				padding: 0.85rem 1rem;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 12px;
+				font-family: "Atkinson", monospace;
+				font-size: 0.9rem;
+				line-height: 1.5;
+				resize: vertical;
+				box-sizing: border-box;
+				color: rgb(var(--gray-dark));
+				background: rgba(var(--gray-light), 0.18);
+				transition: border-color 0.12s;
+			}
+			.io-area:focus {
+				outline: none;
+				border-color: var(--accent);
+			}
+			.io-area[readonly] {
+				background: rgba(var(--gray-light), 0.35);
+				cursor: default;
+			}
+			.divider {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin: 0.75rem 0;
+				font-size: 1.2rem;
+				color: rgb(var(--gray));
+				user-select: none;
+			}
+			.actions-row {
+				display: flex;
+				gap: 0.5rem;
+				margin-top: 0.75rem;
+				flex-wrap: wrap;
+			}
+			.btn {
+				padding: 0.55rem 1.1rem;
+				border-radius: 999px;
+				border: none;
+				font-family: "Atkinson", sans-serif;
+				font-size: 0.9rem;
+				font-weight: 700;
+				cursor: pointer;
+				transition: opacity 0.12s;
+			}
+			.btn:hover { opacity: 0.82; }
+			.btn.primary {
+				background: var(--accent);
+				color: white;
+			}
+			.btn.secondary {
+				background: rgba(var(--gray-light), 0.9);
+				color: rgb(var(--gray-dark));
+			}
+			.status-msg {
+				font-size: 0.85rem;
+				margin-top: 0.5rem;
+				min-height: 1.2em;
+				color: rgb(var(--gray));
+			}
+			.status-msg.error { color: #c0392b; }
+			.status-msg.success { color: #27ae60; }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<nav class="breadcrumb" aria-label="Breadcrumb">
+				<a href={withBase('/tools/')}>Tools</a> &rsaquo; URL Encoder / Decoder
+			</nav>
+
+			<header class="page-header">
+				<p class="eyebrow">Utility</p>
+				<h1>URL Encoder / Decoder</h1>
+				<p class="lead">Runs entirely in your browser — nothing is sent to any server.</p>
+			</header>
+
+			<section class="tool-card" aria-label="URL codec tool">
+				<div class="mode-tabs" role="tablist">
+					<button class="tab-btn active" id="tab-encode" role="tab" aria-selected="true" aria-controls="panel-encode">Encode</button>
+					<button class="tab-btn" id="tab-decode" role="tab" aria-selected="false" aria-controls="panel-decode">Decode</button>
+				</div>
+
+				<div id="panel-encode" role="tabpanel" aria-labelledby="tab-encode">
+					<label class="field-label" for="encode-input">Plain text / URL</label>
+					<textarea class="io-area" id="encode-input" placeholder="Paste text or a URL to encode…" spellcheck="false"></textarea>
+					<div class="divider" aria-hidden="true">↓</div>
+					<label class="field-label" for="encode-output">Encoded output</label>
+					<textarea class="io-area" id="encode-output" readonly placeholder="Result will appear here…" spellcheck="false"></textarea>
+					<div class="actions-row">
+						<button class="btn primary" id="btn-encode">Encode</button>
+						<button class="btn secondary" id="btn-copy-encode">Copy result</button>
+						<button class="btn secondary" id="btn-clear-encode">Clear</button>
+					</div>
+					<p class="status-msg" id="status-encode" aria-live="polite"></p>
+				</div>
+
+				<div id="panel-decode" role="tabpanel" aria-labelledby="tab-decode" hidden>
+					<label class="field-label" for="decode-input">Percent-encoded text</label>
+					<textarea class="io-area" id="decode-input" placeholder="Paste a percent-encoded string to decode…" spellcheck="false"></textarea>
+					<div class="divider" aria-hidden="true">↓</div>
+					<label class="field-label" for="decode-output">Decoded output</label>
+					<textarea class="io-area" id="decode-output" readonly placeholder="Result will appear here…" spellcheck="false"></textarea>
+					<div class="actions-row">
+						<button class="btn primary" id="btn-decode">Decode</button>
+						<button class="btn secondary" id="btn-copy-decode">Copy result</button>
+						<button class="btn secondary" id="btn-clear-decode">Clear</button>
+					</div>
+					<p class="status-msg" id="status-decode" aria-live="polite"></p>
+				</div>
+			</section>
+		</main>
+		<Footer />
+
+		<script is:inline>
+			(function () {
+				// Tab switching
+				const tabEncode = document.getElementById('tab-encode');
+				const tabDecode = document.getElementById('tab-decode');
+				const panelEncode = document.getElementById('panel-encode');
+				const panelDecode = document.getElementById('panel-decode');
+
+				function switchTab(active, inactive, show, hide) {
+					active.classList.add('active');
+					active.setAttribute('aria-selected', 'true');
+					inactive.classList.remove('active');
+					inactive.setAttribute('aria-selected', 'false');
+					show.hidden = false;
+					hide.hidden = true;
+				}
+
+				tabEncode.addEventListener('click', () => switchTab(tabEncode, tabDecode, panelEncode, panelDecode));
+				tabDecode.addEventListener('click', () => switchTab(tabDecode, tabEncode, panelDecode, panelEncode));
+
+				function setStatus(id, msg, type) {
+					const el = document.getElementById(id);
+					el.textContent = msg;
+					el.className = 'status-msg' + (type ? ' ' + type : '');
+					if (type === 'success') setTimeout(() => { el.textContent = ''; el.className = 'status-msg'; }, 2000);
+				}
+
+				async function copyText(text, statusId) {
+					try {
+						await navigator.clipboard.writeText(text);
+						setStatus(statusId, 'Copied!', 'success');
+					} catch {
+						setStatus(statusId, 'Copy failed — please select and copy manually.', 'error');
+					}
+				}
+
+				// Encode
+				document.getElementById('btn-encode').addEventListener('click', () => {
+					const input = document.getElementById('encode-input').value;
+					if (!input.trim()) { setStatus('status-encode', 'Nothing to encode.', ''); return; }
+					try {
+						document.getElementById('encode-output').value = encodeURIComponent(input);
+						setStatus('status-encode', '', '');
+					} catch (e) {
+						setStatus('status-encode', 'Encoding failed: ' + e.message, 'error');
+					}
+				});
+
+				document.getElementById('btn-copy-encode').addEventListener('click', () => {
+					const val = document.getElementById('encode-output').value;
+					if (!val) { setStatus('status-encode', 'Nothing to copy.', ''); return; }
+					copyText(val, 'status-encode');
+				});
+
+				document.getElementById('btn-clear-encode').addEventListener('click', () => {
+					document.getElementById('encode-input').value = '';
+					document.getElementById('encode-output').value = '';
+					setStatus('status-encode', '', '');
+				});
+
+				// Decode
+				document.getElementById('btn-decode').addEventListener('click', () => {
+					const input = document.getElementById('decode-input').value;
+					if (!input.trim()) { setStatus('status-decode', 'Nothing to decode.', ''); return; }
+					try {
+						document.getElementById('decode-output').value = decodeURIComponent(input);
+						setStatus('status-decode', '', '');
+					} catch (e) {
+						setStatus('status-decode', 'Invalid encoding: ' + e.message, 'error');
+					}
+				});
+
+				document.getElementById('btn-copy-decode').addEventListener('click', () => {
+					const val = document.getElementById('decode-output').value;
+					if (!val) { setStatus('status-decode', 'Nothing to copy.', ''); return; }
+					copyText(val, 'status-decode');
+				});
+
+				document.getElementById('btn-clear-decode').addEventListener('click', () => {
+					document.getElementById('decode-input').value = '';
+					document.getElementById('decode-output').value = '';
+					setStatus('status-decode', '', '');
+				});
+			})();
+		</script>
+	</body>
+</html>

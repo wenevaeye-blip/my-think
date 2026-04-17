@@ -1,0 +1,123 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const rawBase = import.meta.env.BASE_URL;
+const normalizedBase = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
+const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://example.com${normalizedBase}`).pathname;
+
+const tools = [
+	{
+		slug: 'url-codec',
+		title: 'URL Encoder / Decoder',
+		description: 'Encode special characters into percent-encoded form, or decode a percent-encoded URL back to plain text.',
+		icon: '🔗',
+	},
+	{
+		slug: 'json-formatter',
+		title: 'JSON Formatter',
+		description: 'Paste raw JSON to validate, pretty-print, and explore its structure. Highlights syntax errors immediately.',
+		icon: '{ }',
+	},
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Tools · ${SITE_TITLE}`} description="Small, free, client-side tools for everyday developer tasks." />
+		<style>
+			.page-header {
+				margin-bottom: 2rem;
+			}
+			.eyebrow {
+				text-transform: uppercase;
+				letter-spacing: 0.08em;
+				font-size: 0.8rem;
+				font-weight: 700;
+				color: var(--accent);
+				margin: 0 0 0.4rem;
+			}
+			.page-header h1 {
+				font-size: clamp(1.8rem, 5vw, 2.8rem);
+				margin: 0 0 0.5rem;
+				line-height: 1.1;
+			}
+			.lead {
+				font-size: 1rem;
+				color: rgb(var(--gray));
+				margin: 0;
+			}
+			.tools-grid {
+				display: grid;
+				gap: 1rem;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				margin-top: 1.5rem;
+			}
+			.tool-card {
+				background: white;
+				border: 1px solid rgba(var(--gray-light), 1);
+				border-radius: 20px;
+				padding: 1.5rem;
+				box-shadow: 0 20px 40px rgba(var(--gray), 0.08);
+				text-decoration: none;
+				color: inherit;
+				display: flex;
+				flex-direction: column;
+				gap: 0.75rem;
+				transition: box-shadow 0.15s ease, transform 0.15s ease;
+			}
+			.tool-card:hover {
+				box-shadow: 0 24px 48px rgba(var(--gray), 0.14);
+				transform: translateY(-2px);
+				color: inherit;
+			}
+			.tool-icon {
+				font-size: 1.6rem;
+				font-family: monospace;
+				font-weight: 700;
+				color: var(--accent);
+				line-height: 1;
+			}
+			.tool-card h2 {
+				font-size: 1.1rem;
+				margin: 0;
+				color: rgb(var(--black));
+			}
+			.tool-card p {
+				font-size: 0.9rem;
+				color: rgb(var(--gray));
+				margin: 0;
+				line-height: 1.5;
+			}
+			@media (max-width: 560px) {
+				.tools-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-header">
+				<p class="eyebrow">Utilities</p>
+				<h1>Small, useful tools</h1>
+				<p class="lead">Everything runs in your browser — no data is sent anywhere.</p>
+			</header>
+
+			<nav class="tools-grid" aria-label="Available tools">
+				{tools.map((tool) => (
+					<a class="tool-card" href={withBase(`/tools/${tool.slug}/`)}>
+						<span class="tool-icon" aria-hidden="true">{tool.icon}</span>
+						<h2>{tool.title}</h2>
+						<p>{tool.description}</p>
+					</a>
+				))}
+			</nav>
+		</main>
+		<Footer />
+	</body>
+</html>
