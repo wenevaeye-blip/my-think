@@ -47,6 +47,19 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 				color: rgb(var(--gray));
 				margin: 0;
 			}
+			.privacy-notice {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				margin-top: 0.65rem;
+				padding: 0.4rem 0.85rem;
+				background: rgba(35, 55, 255, 0.06);
+				border: 1px solid rgba(35, 55, 255, 0.18);
+				border-radius: 999px;
+				font-size: 0.82rem;
+				color: var(--accent-dark);
+				font-weight: 700;
+			}
 			.tool-card {
 				background: white;
 				border: 1px solid rgba(var(--gray-light), 1);
@@ -173,7 +186,10 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 			<header class="page-header">
 				<p class="eyebrow">Utility</p>
 				<h1>JSON Formatter</h1>
-				<p class="lead">Validate, pretty-print, or minify JSON. Runs entirely in your browser.</p>
+				<p class="lead">Validate, pretty-print, or minify JSON directly in your browser.</p>
+			<p class="privacy-notice" aria-label="Privacy assurance">
+				🔒 Your JSON never leaves your device — no servers, no tracking, no worries.
+			</p>
 			</header>
 
 			<section class="tool-card" aria-label="JSON formatter tool">

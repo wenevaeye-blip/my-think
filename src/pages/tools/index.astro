@@ -50,6 +50,19 @@ const tools = [
 				color: rgb(var(--gray));
 				margin: 0;
 			}
+			.privacy-notice {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				margin-top: 0.75rem;
+				padding: 0.4rem 0.85rem;
+				background: rgba(35, 55, 255, 0.06);
+				border: 1px solid rgba(35, 55, 255, 0.18);
+				border-radius: 999px;
+				font-size: 0.82rem;
+				color: var(--accent-dark);
+				font-weight: 700;
+			}
 			.tools-grid {
 				display: grid;
 				gap: 1rem;
@@ -106,6 +119,9 @@ const tools = [
 				<p class="eyebrow">Utilities</p>
 				<h1>Small, useful tools</h1>
 				<p class="lead">Everything runs in your browser — no data is sent anywhere.</p>
+			<p class="privacy-notice" aria-label="Privacy assurance">
+				🔒 All processing happens locally on your device. Nothing is ever uploaded or shared.
+			</p>
 			</header>
 
 			<nav class="tools-grid" aria-label="Available tools">
