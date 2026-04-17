@@ -27,7 +27,30 @@ const tools = [
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Tools · ${SITE_TITLE}`} description="Small, free, client-side tools for everyday developer tasks." />
+		<BaseHead title={`Free Online Developer Tools · ${SITE_TITLE}`} description="Free, client-side web tools for everyday developer tasks — URL encoder/decoder, JSON formatter and validator. No sign-up, no data sent to any server." />
+		<script type="application/ld+json" is:inline>{`
+		{
+			"@context": "https://schema.org",
+			"@type": "CollectionPage",
+			"name": "Free Online Developer Tools",
+			"url": "https://wenevaeye-blip.github.io/my-think/tools/",
+			"description": "Free, client-side web tools for everyday developer tasks. All tools run in your browser — no data is sent to any server.",
+			"hasPart": [
+				{
+					"@type": "WebApplication",
+					"name": "URL Encoder / Decoder",
+					"url": "https://wenevaeye-blip.github.io/my-think/tools/url-codec/",
+					"applicationCategory": "DeveloperApplication"
+				},
+				{
+					"@type": "WebApplication",
+					"name": "JSON Formatter & Validator",
+					"url": "https://wenevaeye-blip.github.io/my-think/tools/json-formatter/",
+					"applicationCategory": "DeveloperApplication"
+				}
+			]
+		}
+		`}</script>
 		<style>
 			.page-header {
 				margin-bottom: 2rem;

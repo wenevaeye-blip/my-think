@@ -12,7 +12,31 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`JSON Formatter · ${SITE_TITLE}`} description="Validate, pretty-print, and minify JSON directly in your browser. Highlights syntax errors with line numbers." />
+		<BaseHead title={`JSON Formatter, Validator & Minifier — Free Online Tool · ${SITE_TITLE}`} description="Free online JSON formatter and validator. Pretty-print messy JSON, spot syntax errors instantly, and minify for production. No sign-up, no data sent to any server." />
+		<script type="application/ld+json" is:inline>{`
+		{
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "JSON Formatter & Validator",
+			"url": "https://wenevaeye-blip.github.io/my-think/tools/json-formatter/",
+			"description": "Free online JSON formatter, validator, and minifier. Pretty-print messy JSON, spot syntax errors instantly, and minify for production. Runs entirely in your browser — no data is sent to any server.",
+			"applicationCategory": "DeveloperApplication",
+			"operatingSystem": "Any",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			},
+			"featureList": [
+				"Pretty-print and format JSON with customizable indentation",
+				"Validate JSON and highlight syntax errors in real time",
+				"Minify JSON for smaller payload sizes",
+				"Show key counts and node statistics",
+				"100% client-side — no data leaves your browser",
+				"No account or sign-up required"
+			]
+		}
+		`}</script>
 		<style>
 			.breadcrumb {
 				font-size: 0.85rem;
@@ -174,6 +198,25 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 				margin-top: 0.4rem;
 				min-height: 1em;
 			}
+			.about-section {
+				margin-top: 2rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid rgba(var(--gray-light), 1);
+			}
+			.about-section h2 {
+				font-size: 1.1rem;
+				margin-bottom: 0.6rem;
+			}
+			.about-section p, .about-section li {
+				font-size: 0.92rem;
+				color: rgb(var(--gray-dark));
+				line-height: 1.65;
+				margin-bottom: 0.5rem;
+			}
+			.about-section ul {
+				padding-left: 1.2rem;
+				margin: 0.4rem 0 0.8rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -219,6 +262,30 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 				</div>
 				<p class="status-msg" id="status-output" aria-live="polite"></p>
 			</section>
+
+			<aside class="about-section">
+				<h2>What is a JSON formatter?</h2>
+				<p>
+					JSON (JavaScript Object Notation) is a lightweight data format used to exchange information
+					between servers and web applications. Raw JSON from an API response is often compact and
+					hard to read. A <strong>JSON formatter</strong> re-indents the data so its structure —
+					objects, arrays, and nested keys — is immediately clear.
+				</p>
+				<h2>Features</h2>
+				<ul>
+					<li><strong>Pretty print</strong> — adds whitespace and indentation for human readability</li>
+					<li><strong>Minify</strong> — strips all unnecessary whitespace to reduce payload size</li>
+					<li><strong>Validate</strong> — detects syntax errors in real time as you type, with a clear error message</li>
+					<li><strong>Stats</strong> — shows the root type, number of top-level keys, and total node count</li>
+				</ul>
+				<h2>How to use</h2>
+				<p>
+					Paste any JSON string into the input area. The tool validates it live while you type.
+					Press <strong>Pretty print</strong> to format, or <strong>Minify</strong> to compress.
+					Use the indent selector to choose 2 spaces, 4 spaces, or a tab character.
+					Everything runs locally in your browser — your data is never uploaded anywhere.
+				</p>
+			</aside>
 		</main>
 		<Footer />
 

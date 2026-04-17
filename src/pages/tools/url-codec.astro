@@ -12,7 +12,29 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`URL Encoder / Decoder · ${SITE_TITLE}`} description="Encode or decode URL percent-encoding directly in your browser. No data leaves your device." />
+		<BaseHead title={`URL Encoder / Decoder — Free Online Tool · ${SITE_TITLE}`} description="Free online URL encoder and decoder. Convert special characters to percent-encoded format or decode any percent-encoded URL instantly. No sign-up, no data sent to any server." />
+		<script type="application/ld+json" is:inline>{`
+		{
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "URL Encoder / Decoder",
+			"url": "https://wenevaeye-blip.github.io/my-think/tools/url-codec/",
+			"description": "Free online URL encoder and decoder. Convert special characters to percent-encoded format or decode any percent-encoded URL instantly. Runs entirely in your browser — no data is sent to any server.",
+			"applicationCategory": "DeveloperApplication",
+			"operatingSystem": "Any",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			},
+			"featureList": [
+				"Encode plain text to percent-encoded URL format",
+				"Decode percent-encoded URLs back to plain text",
+				"100% client-side — no data leaves your browser",
+				"No account or sign-up required"
+			]
+		}
+		`}</script>
 		<style>
 			.breadcrumb {
 				font-size: 0.85rem;
@@ -163,6 +185,25 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 			}
 			.status-msg.error { color: #c0392b; }
 			.status-msg.success { color: #27ae60; }
+			.about-section {
+				margin-top: 2rem;
+				padding-top: 1.5rem;
+				border-top: 1px solid rgba(var(--gray-light), 1);
+			}
+			.about-section h2 {
+				font-size: 1.1rem;
+				margin-bottom: 0.6rem;
+			}
+			.about-section p, .about-section li {
+				font-size: 0.92rem;
+				color: rgb(var(--gray-dark));
+				line-height: 1.65;
+				margin-bottom: 0.5rem;
+			}
+			.about-section ul {
+				padding-left: 1.2rem;
+				margin: 0.4rem 0 0.8rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -215,6 +256,31 @@ const withBase = (path = '') => new URL(path.replace(/^\//, ''), `https://exampl
 					<p class="status-msg" id="status-decode" aria-live="polite"></p>
 				</div>
 			</section>
+
+			<aside class="about-section">
+				<h2>What is URL encoding?</h2>
+				<p>
+					URLs can only contain a limited set of safe characters. When a URL includes spaces,
+					non-ASCII letters, or symbols like <code>&amp;</code>, <code>=</code>, or <code>#</code>,
+					those characters must be replaced with a percent sign followed by two hex digits —
+					for example, a space becomes <code>%20</code> and <code>@</code> becomes <code>%40</code>.
+					This process is called <strong>percent-encoding</strong> or URL encoding.
+				</p>
+				<h2>When do you need it?</h2>
+				<ul>
+					<li>Building query strings for API requests</li>
+					<li>Passing URLs as parameters inside another URL</li>
+					<li>Debugging a malformed link that came back from a server</li>
+					<li>Reading encoded form data submitted from an HTML form</li>
+				</ul>
+				<h2>How to use this tool</h2>
+				<p>
+					Paste any plain text or full URL into the <strong>Encode</strong> tab and press Encode —
+					every unsafe character is converted instantly. Switch to the <strong>Decode</strong> tab
+					to reverse the process. All conversion happens locally in your browser;
+					no text is ever sent to a server.
+				</p>
+			</aside>
 		</main>
 		<Footer />
 
